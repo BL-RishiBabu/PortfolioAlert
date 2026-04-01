@@ -14,18 +14,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // Updated to use Lambda syntax
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Allows your registration API
-                        .anyRequest().authenticated()               // Protects everything else
-                );
-
+        http.csrf(csrf ->
+                csrf.disable()).authorizeHttpRequests(auth ->
+                    auth.requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated()
+        );
         return http.build();
     }
 
-    // This Bean allows your UserService to "Inject" the encoder
-    // instead of creating a 'new' one every time.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
